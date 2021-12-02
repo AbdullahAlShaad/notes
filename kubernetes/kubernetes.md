@@ -46,4 +46,50 @@ restart failed pod, master detects a node failure and schedule the pod in anothe
 **Kube-proxy:** Kube-proxy is responsible for maintaining network across the cluster. It maintains internet among
 nodes, pods and containers.
 
-**Container-Runtime(Docker):** It runs the container inside the pod.
+**Container-Runtime (Docker):** It runs the container inside the pod.
+
+### Kubernetes Objects
+
+Basic `yaml` file for Kubernetes Deployment object
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+
+```
+
+**Namespace** provides a degree of isolation withing the cluster. Namespace-based scoping 
+is applicable only for namespaced objects(i.e. Deployments, Services, etc) and not for cluster
+-wide objects(e.g. StorageClass, Nodes, PersistentVolumes, etc).Each Kubernetes resources
+can only be in one namespace.
+
+**Label:** Labels are key-value pairs that are attached to objects such as pods. Labels are intended to be used
+to identifying attributes of objects that are meaningful and relevant to users.
+
+**Label selectors :** Using label selector, the client/user can identify a set of objects.
+
+**Field Selectors :** Used to select k8s resources based on the value of one or more resource fields.
+
+To get all the running pods
+```shell
+kubectl get pods --field-selector status.phase=Running
+```
+**Finalizers :** Finalizers are namespaced keys that tell k8s to wait specific conditions are met before it fully 
+deletes resources marked for deletion. It can be used as garbage collector
