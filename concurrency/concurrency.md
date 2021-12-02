@@ -1,4 +1,4 @@
-#Concurrency Notes
+# Concurrency Notes
 
 **Race Conditions :** When two or more operations required to execute in correct order but they are not executed in correct order, it is called race conditions
 
@@ -13,7 +13,7 @@
 
 **Starvation :** Starvation is a situation where a concurrent process cannot get all the resource it needs to perform works. Other processes keeps using resource more to starve a 					 process.
 
-###Three Questions to ask about concurrent code :
+### Three Questions to ask about concurrent code :
 
 1. Who is responsible for the concurrency ?
 
@@ -80,14 +80,14 @@ it is also responsible for ensuring it can stop the goroutine"*
 **Error Handling :**
 - Error should be passed along with result to a place where the scope has more knowledge about how to handle that error
 
-###Pipeline :
+### Pipeline :
 1. Passing data through series of go routines/functions
 2. Input of a go routine is feed to another one
 3. Generator generates data at first
 4. A stage consumes and returns the same type
 
 
-###Fan Out Fan In
+### Fan Out Fan In
 1. If a process takes much time and input of this function does not depends on output of prev iteration we can run this function on multiple go routine to speed up.
 2. We multiplex outputs of different channels into one channel and stream them in one channel
 
@@ -95,12 +95,12 @@ it is also responsible for ensuring it can stop the goroutine"*
 - We take a channel of channels and output all the data from different channels to one channel
 
 
-###Queueing :
+### Queueing :
 1. Queuing will not help decrease the amount time spent in a system. It will either increase arrival rate of units or increase the average time spends in the system
 2. Using queue most of the time we can not increase the performance but we can save the request from the client. So the clients will have lag but the won't have request denied
 3. Queue improves performance when batch processing improves performance(example : IO Buffered Write). It collects the data and allocate memory at once since memory allocation is costly . If we do it for single data performance decreases
 
-###Context Package :
+### Context Package :
 1. Nice way to terminate go routines from any of its ancestor
 2. Can set deadline for a go routine/function to complete its execution
 3. Can pass some key-value pair
