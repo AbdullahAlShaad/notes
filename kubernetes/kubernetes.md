@@ -23,7 +23,8 @@ Kubernetes cluster have two types of nodes.
 1. **Master Node**
 2. **Worker Node**
 
-![alt text](https://github.com/Shaad7/notes/blob/master/images/K8S_Archi.png)
+![alt text](https://github.com/Shaad7/notes/blob/master/images/K8S_Archi.png?raw=true 
+"Kubernetes Architecture")
 
 **API Server:** Users interact with k8s cluster via API Server in master node. Client of this api server can
 be Kubernetes Dashboard(UI) or Kubectl(CLI) or any script.
