@@ -2,7 +2,8 @@
 
 ### Basic Terminologies :
 
-**Pods:** Pod is group of containers. Pod can group together can container images into a single deployable unit. Most of times
+**Pods**
+: Pod is group of containers. Pod can group together can container images into a single deployable unit. Most of times
 one container is run in one pod unless there is dependency.
 
 **Node:**  Kubernetes runs workload by placing container into Pods to run on Nodes.
@@ -93,3 +94,38 @@ kubectl get pods --field-selector status.phase=Running
 ```
 **Finalizers :** Finalizers are namespaced keys that tell k8s to wait specific conditions are met before it fully 
 deletes resources marked for deletion. It can be used as garbage collector
+
+
+### Pods
+
+Pods are the smallest deployable unit in kubernetes. A pod usually runs one container but can also run multiple container
+that needs to work together. A pod natively provides shared networking and storage for its containers.
+
+Each Pod is assigned a unique IP address. Containers inside a Pod can communicate between each other using 
+`localhost`. Containers are not in same Pod can communicate using Pods IP addresses.
+
+*Pod is not a process but environment for running containers*
+
+Usually we don't need to create Pod manually. Deployment, StatefulSet and DaemonSet manages pods.
+PodTemplates are specification for creating Pods and are included in workload resources such as Deployment,
+StatefulSet, DaemonSet.
+
+A sample manifest of a simple job with a template that starts one container.
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hello
+spec:
+  template:
+    # This is the pod template
+    spec:
+      containers:
+      - name: hello
+        image: busybox
+        command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
+      restartPolicy: OnFailure
+    # The pod template ends here
+```
+When the pod template is updated, the controller creates new pod based on updated template and replace the
+existing one.
