@@ -129,3 +129,16 @@ spec:
 ```
 When the pod template is updated, the controller creates new pod based on updated template and replace the
 existing one.
+
+**Init Container**
+: Init container runs in pod before actual container. Init container usually contains utilities or set up scripts
+not present in an app image.
+
+**Pod Topology Spread Constraint** 
+: Using `topologyKey` we can put pods on different zones and nodes.
+
+**Pod Disruption Budget**
+: Pod disruption budget tries to ensure a minimum number of pod running always. It prevents voluntary disruption
+such a directly deleting a pos or updating a deployment pod template causing restart. However, it can not 
+prevent involuntary disruption such as hardware failure or kernel panic. Though it counts both disruption.
+
