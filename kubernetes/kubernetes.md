@@ -51,31 +51,6 @@ nodes, pods and containers.
 
 ### Kubernetes Objects
 
-Basic `yaml` file for Kubernetes Deployment object
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment
-spec:
-  selector:
-    matchLabels:
-      app: nginx
-  replicas: 2 # tells deployment to run 2 pods matching the template
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:1.14.2
-        ports:
-        - containerPort: 80
-
-```
-
 **Namespace** provides a degree of isolation withing the cluster. Namespace-based scoping 
 is applicable only for namespaced objects(i.e. Deployments, Services, etc) and not for cluster
 -wide objects(e.g. StorageClass, Nodes, PersistentVolumes, etc).Each Kubernetes resources
@@ -182,4 +157,69 @@ using Kubernetes finalizers.
 
 _The kubelet only garbage collects the containers it manages._
 
+### Deployment
 
+A deployment provides declarative updates for Pods and ReplicaSets. We can create, update, delete and manage Pods or
+ReplicaSets using Deployment.
+
+Basic `yaml` file for Kubernetes Deployment object
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+```
+
+To apply deployment
+```shell
+kubectl apply -f FilePath
+```
+
+To get all the deployment : 
+```shell
+kubectl get deployment
+```
+
+To update the image of the pods the deployment created 
+```shell
+kubectl set image deployment/nginx-deployment nginx=nginx:1.16.1
+```
+
+To check the revisions of nginx deployment
+```shell
+kubectl rollout history deployment/nginx-deployment
+```
+
+To see details of revision 2
+```shell
+kubectl rollout history deployment/nginx-deployment --revision=2
+```
+
+To rollback to a specific version we can use `--to-revision=2`
+```shell
+kubectl rollout undo deployment/nginx-deployment --to-revision=2
+```
+
+To scale a deployment 
+```shell
+kubectl scale deployment/nginx-deployment --replicas=10
+
+```
