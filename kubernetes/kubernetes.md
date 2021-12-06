@@ -137,8 +137,49 @@ not present in an app image.
 **Pod Topology Spread Constraint** 
 : Using `topologyKey` we can put pods on different zones and nodes.
 
+**Pod Termination** 
+: API Server updates the pod status and the pod in the api server is considered dead beyond grace period(30s). Kubelet
+notices the pod updates and start graceful shutdown. Control Plane removes the shutting-down Pod from Endpoints. The 
+pod can no longer provide service. Other objects no longer consider the pod valid. When the graceful shutdown period
+is over, kubelet triggers forcible shutdown.
+
 **Pod Disruption Budget**
 : Pod disruption budget tries to ensure a minimum number of pod running always. It prevents voluntary disruption
 such a directly deleting a pos or updating a deployment pod template causing restart. However, it can not 
 prevent involuntary disruption such as hardware failure or kernel panic. Though it counts both disruption.
+
+### Node
+
+Node in a kubernetes cluster is a physical or virtual machine which holds the pods. There are two ways to add nodes in API
+server 
+1. The kubelet on a node self-registers to the control plane
+2. Human user manually add a Node object
+
+***Heartbeats*** sent by k8s nodes to determine health of each node. There are two form of heartbeats.
+1. updates to the `.status` of Node
+2. updates Lease objects within the kube-node-lease namespace. Each node has an associated Lease Object
+
+**Graceful Node Shutdown**
+: kubelet ensures tha pod follows the normal pod termination process. During graceful shutdown kubelet terminates pod in 
+two phases , termination of regular pods and critical pods. There is specific time duration to shut down critical 
+pods.
+
+**Controller**
+: A controller tracks at least one k8s resource type, and it is responsible for making the current state of the object
+come closer to desired state. Controller might carry the action out itself or will send messages to the API server 
+
+**Cloud Controller Manager**
+: The could-controller-manager is a k8s `control plane` component that embeds cloud specific control logic.
+It lets us link our cluster into cloud provides api.
+
+**Garbage Collection**
+: Kubernetes checks for and deletes objects that no longer have owner references, like the pods left behind when
+ReplicaSet is deletes. We can control how and when garbage collection deletes resources that have owner references
+using Kubernetes finalizers.
+
+1. ***Foreground cascading deletion***: k8s API Server first removes the dependents, then the owner.
+2. ***Background cascading deletion***: k8s API Server first removes the owner, then removes the orphan objects.
+
+_The kubelet only garbage collects the containers it manages._
+
 
