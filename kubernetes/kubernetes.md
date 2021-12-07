@@ -200,3 +200,21 @@ StatefulSet is used to manage a set of Pods which runs stateful applications lik
 StatefulSet maintains sticky identity for each Pod and the Pods are not interchangeable. 
 If an app requires Stable,unique network identifiers and/or persistent storage and/or ordered 
 deployment/scaling and/or automated rolling updates, StatefulSet is used.
+
+### DaemonSet
+
+A DaemonSet ensures that all Nodes run a copy of Pod or all the zone run a copy of a Pod. DaemonSet automatically
+adds Pod to newly created Nodes.
+
+There are many programs that need to run on a system without intervention from the user. These programs are often
+referred to as background processes or ***Daemons***
+
+_Once the DaemonSet is created, selectors and labels can not be changed_
+
+Taints prohibit certain nodes from scheduling pods on them whereas tolerations allow(but not require) certain pods to 
+scheduled on nodes with matching taints.
+
+We can perform rolling updates on DaemonSet.
+
+
+
