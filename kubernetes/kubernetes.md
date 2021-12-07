@@ -193,3 +193,10 @@ ReplicaSet, the Pods will be immediately acquired by ReplicaSet.
 
 ***Pod Deletion Cost*** 
 : We can assign an integer value cost with each pod. When scaling down the pod with lower cost will be removed first.
+
+### StatefulSets
+
+StatefulSet is used to manage a set of Pods which runs stateful applications like database.
+StatefulSet maintains sticky identity for each Pod and the Pods are not interchangeable. 
+If an app requires Stable,unique network identifiers and/or persistent storage and/or ordered 
+deployment/scaling and/or automated rolling updates, StatefulSet is used.
