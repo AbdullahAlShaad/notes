@@ -85,23 +85,6 @@ Usually we don't need to create Pod manually. Deployment, StatefulSet and Daemon
 PodTemplates are specification for creating Pods and are included in workload resources such as Deployment,
 StatefulSet, DaemonSet.
 
-A sample manifest of a simple job with a template that starts one container.
-```yaml
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: hello
-spec:
-  template:
-    # This is the pod template
-    spec:
-      containers:
-      - name: hello
-        image: busybox
-        command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
-      restartPolicy: OnFailure
-    # The pod template ends here
-```
 When the pod template is updated, the controller creates new pod based on updated template and replace the
 existing one.
 
@@ -162,32 +145,6 @@ _The kubelet only garbage collects the containers it manages._
 A deployment provides declarative updates for Pods and ReplicaSets. We can create, update, delete and manage Pods or
 ReplicaSets using Deployment.
 
-Basic `yaml` file for Kubernetes Deployment object
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment
-  labels:
-    app: nginx
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-        - name: nginx
-          image: nginx:1.14.2
-          ports:
-            - containerPort: 80
-```
-
 To apply deployment
 ```shell
 kubectl apply -f FilePath
@@ -221,5 +178,18 @@ kubectl rollout undo deployment/nginx-deployment --to-revision=2
 To scale a deployment 
 ```shell
 kubectl scale deployment/nginx-deployment --replicas=10
-
 ```
+
+### ReplicaSet
+
+ReplicaSet is used to maintain a specific number of identical Pods running at any given time. ReplicaSet creates or
+acquires nodes according to the manifest. ReplicaSet maintains owner relation with its Pods.
+
+_A ReplicaSet only ensures a certain number of Pods are running at any given time. However, Deployment manages
+ReplicaSet and provides other useful feature such as rollback. So most of the time we use Deployment_
+
+If newly created Pods(from manifest) do not have a Controller as their owner reference and match the selector of a
+ReplicaSet, the Pods will be immediately acquired by ReplicaSet.
+
+***Pod Deletion Cost*** 
+: We can assign an integer value cost with each pod. When scaling down the pod with lower cost will be removed first.
