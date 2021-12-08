@@ -217,7 +217,7 @@ scheduled on nodes with matching taints.
 We can perform rolling updates on DaemonSet.
 
 
-# Jobs
+### Jobs
 
 A Job creates one or more Pods and will continue execution until a specified number of Pod
 terminates successfully. A job performs a task and terminates. It does not run forever.
@@ -228,7 +228,7 @@ pods=$(kubectl get pods --selector=job-name=sampleJob --output=jsonpath='{.items
 echo $pods
 ```
 
-### Types of Jobs
+#### Types of Jobs
 - **Non-parallel Jobs** : One pod is started unless the pod fails. Job is completed when one pod 
 terminates successfully.
 - **Parallel Jobs with fixed completion count** : Job completes when there are `spec.completion`
@@ -237,6 +237,14 @@ successful Pods.
 terminates successfully, the Job is successful.
 
 
+### CronJob
 
+A Cronjob creates Jobs on a repeating schedule(given in Cron format). It is used to perform
+scheduled actions such as backups, report generation, and so on.
+
+If the `startingDeadlineSeconds` field is set, the controller counts how many missed jobs occurred
+from the value of `startingDeadlineSeconds` rather than from the last scheduled time untill now.
+If `startingDeadlineSeconds` is 200, the controller counts how many missed jobs occurred in the last
+200 seconds.
 
 
