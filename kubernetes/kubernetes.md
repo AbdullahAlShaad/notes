@@ -217,4 +217,26 @@ scheduled on nodes with matching taints.
 We can perform rolling updates on DaemonSet.
 
 
+# Jobs
+
+A Job creates one or more Pods and will continue execution until a specified number of Pod
+terminates successfully. A job performs a task and terminates. It does not run forever.
+
+To list all the Pods belong to Job `sampleJob`
+```shell
+pods=$(kubectl get pods --selector=job-name=sampleJob --output=jsonpath='{.items[*].metadata.name}')
+echo $pods
+```
+
+### Types of Jobs
+- **Non-parallel Jobs** : One pod is started unless the pod fails. Job is completed when one pod 
+terminates successfully.
+- **Parallel Jobs with fixed completion count** : Job completes when there are `spec.completion`
+successful Pods.
+- **Parallel Jobs with a work queue** : `.spec.parallelism` number of pods start. If one Pod
+terminates successfully, the Job is successful.
+
+
+
+
 

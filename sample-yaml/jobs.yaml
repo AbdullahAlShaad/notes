@@ -1,0 +1,19 @@
+# A Job that runs a Pod based on perl image, and It computes pi to 2000 places
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template:
+    spec:
+      containers:
+        - name: pi
+          image: perl
+          command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      restartPolicy: Never
+  backoffLimit: 4 #After 4 failure of Pod, the Job will terminate
+  activeDeadlineSeconds: 100 # If the Pod does not terminate before 100s, the Job will fail and terminate
+  ttlSecondsAfterFinished: 100 #TTL controller will delete the job cascadingly 100s after it finishes
+
+
