@@ -22,12 +22,13 @@ spec:
       app: nginx # has to match .spec.template.metadata.labels
   serviceName: "nginx"
   replicas: 3 # by default is 1
+  minReadySeconds: 10 # by default is 0 , minimum number of seconds for which a newly created pod should be ready without any of its container crashing
   template:
     metadata:
       labels:
         app: nginx # has to match .spec.selector.matchLabels
     spec:
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 10 #The pods have 10 seconds to terminate before kill operation is initited
       containers:
         - name: nginx
           image: k8s.gcr.io/nginx-slim:0.8

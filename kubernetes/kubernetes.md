@@ -71,7 +71,7 @@ kubectl get pods --field-selector status.phase=Running
 deletes resources marked for deletion. It can be used as garbage collector
 
 
-### Pods
+## Pods
 
 Pods are the smallest deployable unit in kubernetes. A pod usually runs one container but can also run multiple container
 that needs to work together. A pod natively provides shared networking and storage for its containers.
@@ -106,7 +106,7 @@ is over, kubelet triggers forcible shutdown.
 such a directly deleting a pos or updating a deployment pod template causing restart. However, it can not 
 prevent involuntary disruption such as hardware failure or kernel panic. Though it counts both disruption.
 
-### Node
+## Node
 
 Node in a kubernetes cluster is a physical or virtual machine which holds the pods. There are two ways to add nodes in API
 server 
@@ -140,7 +140,7 @@ using Kubernetes finalizers.
 
 _The kubelet only garbage collects the containers it manages._
 
-### Deployment
+## Deployment
 
 A deployment provides declarative updates for Pods and ReplicaSets. We can create, update, delete and manage Pods or
 ReplicaSets using Deployment.
@@ -180,7 +180,7 @@ To scale a deployment
 kubectl scale deployment/nginx-deployment --replicas=10
 ```
 
-### ReplicaSet
+## ReplicaSet
 
 ReplicaSet is used to maintain a specific number of identical Pods running at any given time. ReplicaSet creates or
 acquires nodes according to the manifest. ReplicaSet maintains owner relation with its Pods.
@@ -194,14 +194,28 @@ ReplicaSet, the Pods will be immediately acquired by ReplicaSet.
 ***Pod Deletion Cost*** 
 : We can assign an integer value cost with each pod. When scaling down the pod with lower cost will be removed first.
 
-### StatefulSets
+## StatefulSets
 
 StatefulSet is used to manage a set of Pods which runs stateful applications like database.
 StatefulSet maintains sticky identity for each Pod and the Pods are not interchangeable. 
 If an app requires Stable,unique network identifiers and/or persistent storage and/or ordered 
 deployment/scaling and/or automated rolling updates, StatefulSet is used.
 
-### DaemonSet
+StatefulSet uses a headless service so that using it all the pods can be uniquely identified. Unlike Deployment,
+we can't just forward service to any pod, we need to identify the all the Pods uniquely.
+
+Each Pod can be identified as `$podname.$(governing headless service domain)` where Headless service domain 
+can be constructed as `$(service name).$(namespace).svc.cluster.local`
+
+_When the StatefulSet Controller creates a Pod, it adds a label,
+statefulset.kubernetes.io/pod-name, that is set to the name of the Pod._
+
+- When StatefulSet fails due to node failure and the control plane creates replacement Pod, the StatefulSet retains 
+existing PersistentVolumeClaim.
+- When Pod is deleted due to deletion or scaling of StatefulSet , we can configure if we want to 
+delete or retain the data.
+
+## DaemonSet
 
 A DaemonSet ensures that all Nodes run a copy of Pod or all the zone run a copy of a Pod. DaemonSet automatically
 adds Pod to newly created Nodes.
@@ -217,7 +231,7 @@ scheduled on nodes with matching taints.
 We can perform rolling updates on DaemonSet.
 
 
-### Jobs
+## Jobs
 
 A Job creates one or more Pods and will continue execution until a specified number of Pod
 terminates successfully. A job performs a task and terminates. It does not run forever.
@@ -243,8 +257,38 @@ A Cronjob creates Jobs on a repeating schedule(given in Cron format). It is used
 scheduled actions such as backups, report generation, and so on.
 
 If the `startingDeadlineSeconds` field is set, the controller counts how many missed jobs occurred
-from the value of `startingDeadlineSeconds` rather than from the last scheduled time untill now.
+from the value of `startingDeadlineSeconds` rather than from the last scheduled time until now.
 If `startingDeadlineSeconds` is 200, the controller counts how many missed jobs occurred in the last
 200 seconds.
+
+## Services
+
+In k8s, a Service is an abstraction which defines a logical set of Pods and a policy
+by which to access them. Service is used to communicate between two k8s objects or maintain communication between outside
+world and kubernetes objects. We can't use Pods IP address for communication because it changes
+when go gets restarted. Service enables decoupling components.
+
+A service named `my-service` which targets TCP port 9376 on any Pod with the app=MyApp label
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+```
+
+If service have no selector, Endpoints object is not created by k8s.
+
+***EndPoint*** When a service matches pods with selector, the pods IP address and Port is stored in Endpoint object.
+When the pod is restarted, Endpoint object is updated
+
+Endpoint slices works like Endpoint, but it is more scalable and more suitable when we have large cluster.
+
 
 
