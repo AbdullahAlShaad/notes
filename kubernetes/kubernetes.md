@@ -340,14 +340,21 @@ load balancing or proxying done by the platform for them.
 to return A records that point directly to the Pods backing the Service.
 - If selector is not defined `Endpoint` object is not created.
 
-#### Service Type
+### Service Type
 
-***NodePort***
+#### NodePort
 : NodePort Service listens to a Port on the node(s) and forward requests on that port to a port on the Pod. We can 
 access NodePort service from outside the cluster. We can use any nodes IP and `nodeport` to get service. NodePort 
 Service forward requests to Pod randomly, or we can set up our own load balancing solutions.
+![alt text](https://github.com/Shaad7/notes/blob/master/images/NodePort.png?raw=true
+"IPVS proxy mode")
+
+[_Sample YAML to create NodePort Service_](https://github.com/Shaad7/notes/blob/master/sample-yaml/nodeport.yaml)
 
 
+#### Load Balancer
+: LoadBalancer does not use any nodes IP, and it distributes load across different Pods. 
+It is provided by cloud service provider. It is resolves single point failure from NodePort
+Service. Load Balancer generates an external IP for public use.
 
-
-
+[_Sample YAML to create Load Balancer Service_](https://github.com/Shaad7/notes/blob/master/sample-yaml/load-balancer.yaml)
