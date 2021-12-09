@@ -145,6 +145,9 @@ _The kubelet only garbage collects the containers it manages._
 A deployment provides declarative updates for Pods and ReplicaSets. We can create, update, delete and manage Pods or
 ReplicaSets using Deployment.
 
+[_Sample YAML to create Deployment_](https://github.com/Shaad7/notes/blob/master/sample-yaml/deployment.yaml)
+
+
 To apply deployment
 ```shell
 kubectl apply -f FilePath
@@ -185,6 +188,9 @@ kubectl scale deployment/nginx-deployment --replicas=10
 ReplicaSet is used to maintain a specific number of identical Pods running at any given time. ReplicaSet creates or
 acquires nodes according to the manifest. ReplicaSet maintains owner relation with its Pods.
 
+[_Sample YAML to create ReplicaSet_](https://github.com/Shaad7/notes/blob/master/sample-yaml/replicaset.yaml)
+
+
 _A ReplicaSet only ensures a certain number of Pods are running at any given time. However, Deployment manages
 ReplicaSet and provides other useful feature such as rollback. So most of the time we use Deployment_
 
@@ -200,6 +206,9 @@ StatefulSet is used to manage a set of Pods which runs stateful applications lik
 StatefulSet maintains sticky identity for each Pod and the Pods are not interchangeable. 
 If an app requires Stable,unique network identifiers and/or persistent storage and/or ordered 
 deployment/scaling and/or automated rolling updates, StatefulSet is used.
+
+[_Sample YAML to create StatefulSet_](https://github.com/Shaad7/notes/blob/master/sample-yaml/statefulset.yaml)
+
 
 StatefulSet uses a headless service so that using it all the pods can be uniquely identified. Unlike Deployment,
 we can't just forward service to any pod, we need to identify the all the Pods uniquely.
@@ -230,6 +239,8 @@ scheduled on nodes with matching taints.
 
 We can perform rolling updates on DaemonSet.
 
+[_Sample YAML to create DaemonSet_](https://github.com/Shaad7/notes/blob/master/sample-yaml/daemon-set.yaml)
+
 
 ## Jobs
 
@@ -250,6 +261,9 @@ successful Pods.
 - **Parallel Jobs with a work queue** : `.spec.parallelism` number of pods start. If one Pod
 terminates successfully, the Job is successful.
 
+[_Sample YAML to create Job_](https://github.com/Shaad7/notes/blob/master/sample-yaml/jobs.yaml)
+
+
 
 ### CronJob
 
@@ -260,6 +274,9 @@ If the `startingDeadlineSeconds` field is set, the controller counts how many mi
 from the value of `startingDeadlineSeconds` rather than from the last scheduled time until now.
 If `startingDeadlineSeconds` is 200, the controller counts how many missed jobs occurred in the last
 200 seconds.
+
+[_Sample YAML to create CronJob_](https://github.com/Shaad7/notes/blob/master/sample-yaml/cronjob.yaml)
+
 
 ## Services
 
@@ -342,10 +359,17 @@ to return A records that point directly to the Pods backing the Service.
 
 ### Service Type
 
+#### Cluster IP
+Service creates a virtual IP inside  the cluster to enable communication between different
+services such as between a set of backend pods and a set of frontend pods. Cluster IP used 
+by the Service proxies.
+
 #### NodePort
-: NodePort Service listens to a Port on the node(s) and forward requests on that port to a port on the Pod. We can 
+NodePort Service listens to a Port on the node(s) and forward requests on that port to a port on the Pod. We can 
 access NodePort service from outside the cluster. We can use any nodes IP and `nodeport` to get service. NodePort 
 Service forward requests to Pod randomly, or we can set up our own load balancing solutions.
+
+
 ![alt text](https://github.com/Shaad7/notes/blob/master/images/NodePort.png?raw=true
 "IPVS proxy mode")
 
@@ -353,8 +377,19 @@ Service forward requests to Pod randomly, or we can set up our own load balancin
 
 
 #### Load Balancer
-: LoadBalancer does not use any nodes IP, and it distributes load across different Pods. 
+LoadBalancer does not use any nodes IP, and it distributes load across different Pods. 
 It is provided by cloud service provider. It is resolves single point failure from NodePort
 Service. Load Balancer generates an external IP for public use.
 
 [_Sample YAML to create Load Balancer Service_](https://github.com/Shaad7/notes/blob/master/sample-yaml/load-balancer.yaml)
+
+Load Balancer uses node port internally which can be disabled. If disabled Load Balancer will 
+forward the traffic to Pods directly.
+
+We can specify load balancer implementation overriding default cloud provider implementation.
+
+#### Service IP Address
+
+Unlike Pod IP addresses, which actually route to a fixed destination, Service IPs are not 
+actually answered by a single host. Instead, kube-proxy uses iptables to define virtual IP
+addresses which are transparently redirected as needed.
