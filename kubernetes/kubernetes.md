@@ -3,7 +3,7 @@
 ### Basic Terminologies :
 
 **Pods**
-: Pod is group of containers. Pod can group together can container images into a single deployable unit. Most of times
+: Pod is group of containers. Pod can group together can container images into a single deployable unit. Most of the time
 one container is run in one pod unless there is dependency.
 
 **Node:**  Kubernetes runs workload by placing container into Pods to run on Nodes.
@@ -52,8 +52,8 @@ nodes, pods and containers.
 ### Kubernetes Objects
 
 **Namespace** provides a degree of isolation withing the cluster. Namespace-based scoping 
-is applicable only for namespaced objects(i.e. Deployments, Services, etc) and not for cluster
--wide objects(e.g. StorageClass, Nodes, PersistentVolumes, etc).Each Kubernetes resources
+is applicable only for namespaced objects(i.e. Deployments, Services, etc.) and not for cluster
+-wide objects(e.g. StorageClass, Nodes, PersistentVolumes, etc.).Each Kubernetes resources
 can only be in one namespace.
 
 **Label:** Labels are key-value pairs that are attached to objects such as pods. Labels are intended to be used
@@ -208,7 +208,7 @@ Each Pod can be identified as `$podname.$(governing headless service domain)` wh
 can be constructed as `$(service name).$(namespace).svc.cluster.local`
 
 _When the StatefulSet Controller creates a Pod, it adds a label,
-statefulset.kubernetes.io/pod-name, that is set to the name of the Pod._
+StatefulSet.kubernetes.io/pod-name, that is set to the name of the Pod._
 
 - When StatefulSet fails due to node failure and the control plane creates replacement Pod, the StatefulSet retains 
 existing PersistentVolumeClaim.
@@ -225,7 +225,7 @@ referred to as background processes or ***Daemons***
 
 _Once the DaemonSet is created, selectors and labels can not be changed_
 
-Taints prohibit certain nodes from scheduling pods on them whereas tolerations allow(but not require) certain pods to 
+Taints prohibit certain nodes from scheduling pods on them whereas toleration allow(but not require) certain pods to 
 scheduled on nodes with matching taints.
 
 We can perform rolling updates on DaemonSet.
@@ -290,5 +290,35 @@ When the pod is restarted, Endpoint object is updated
 
 Endpoint slices works like Endpoint, but it is more scalable and more suitable when we have large cluster.
 
+#### Kube-Proxy
+kube-proxy is responsible for implementing a form of virtual IP for Services.
+
+***User space proxy mode***
+: In this mode, kube-proxy watches the k8s control plane for addition and removal of Service and Endpoint objects.
+kube-proxy in userspace mode chooses a backend via a round-robin algorithm. If the chosen pod does not respond,
+kube-proxy will retry with a different backend Pod.
+
+![alt text](https://github.com/Shaad7/notes/blob/master/images/UserSpaceProxy.png?raw=true
+"User Space Proxy Mode")
+
+***iptables proxy mode***
+: In this mode, kube-proxy watches the k8s control plane for addition and removal of Service and Endpoint objects.
+kube-proxy in iptables mode chooses a backend at random. kube-proxy only sees backend that are healthy using 
+readiness probes. So the selected pod should be healthy.
+
+![alt text](https://github.com/Shaad7/notes/blob/master/images/IPtableProxy.png?raw=true
+"iptables proxy mode")
+
+***IPVS proxy mode***
+: In `ipvs` mode, kube-proxy watches k8s Services and Endpoints, calls  `netlink` interface to create IPVS rules
+accordingly and sync IPVS rules with k8s Services and Endpoint ts periodically. kube-proxy in IPVS mode redirect 
+traffic with lower latency than kube-proxy in iptables mode with much better performance when synchronising proxy rules.
+IPVS provides more options for balancing traffic to backend Pods such as Round-Robin, Least Connection, Destination 
+Hashing, Source Hashing, Shortest Expected Delay, Never Queue.
+
+![alt text](https://github.com/Shaad7/notes/blob/master/images/IPVSProxy.png?raw=true
+"IPVS proxy mode")
+
+_To run kube-proxy in IPVS mode, we must make IPVS available on the node before starting kube-proxy._
 
 
