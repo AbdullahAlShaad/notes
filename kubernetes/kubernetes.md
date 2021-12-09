@@ -308,7 +308,8 @@ When the pod is restarted, Endpoint object is updated
 Endpoint slices works like Endpoint, but it is more scalable and more suitable when we have large cluster.
 
 #### Kube-Proxy
-kube-proxy is responsible for implementing a form of virtual IP for Services.
+kube-proxy is responsible for implementing a form of virtual IP for Services. The IP of k8s objects are not accessible
+from outside world. Thus, they are called Virtual IP.
 
 ***User space proxy mode***
 : In this mode, kube-proxy watches the k8s control plane for addition and removal of Service and Endpoint objects.
@@ -393,3 +394,12 @@ We can specify load balancer implementation overriding default cloud provider im
 Unlike Pod IP addresses, which actually route to a fixed destination, Service IPs are not 
 actually answered by a single host. Instead, kube-proxy uses iptables to define virtual IP
 addresses which are transparently redirected as needed.
+
+## Topology Aware Hints
+
+When calculating the endpoints for a Service, the EndpointSlice controller considers the topology(region and zone) of
+each endpoint and populated the hints' field to allocate it to a zone. Kube proxy can consume those hints, and use them to 
+influence how traffic to is routed. 
+
+The EndpointSlice controller is responsible for setting hints on EndpointSlices when this feature is enabled. 
+The controller allocated a proportional amount of endpoints to each zone.
