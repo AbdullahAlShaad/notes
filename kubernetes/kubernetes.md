@@ -322,3 +322,32 @@ Hashing, Source Hashing, Shortest Expected Delay, Never Queue.
 _To run kube-proxy in IPVS mode, we must make IPVS available on the node before starting kube-proxy._
 
 
+#### Multi Port Service
+If we need to we can expose more than one port. While using multiple port for a Service, we must give all port  names
+so that these are unambiguous.
+
+***DNS***
+: If DNS has been enabled in cluster then all Pods should automatically be able to resolve Services by their
+DNS names. If a service is called `my-service` and it is in `my-ns` namespace, the control plane and the DNS
+Service acting together create a DNS record for `my-service.my-ns`. Pods can find the service by resolving `my-service.my-ns`.
+Pods in the same namespace can find the Service only by using `my-service`
+
+***Headless Services***
+: For Headless Services, a cluster IP is not allocated, kube-proxy does not handle these Services. There is no
+load balancing or proxying done by the platform for them. 
+
+- For headless Services with selector, `Endpoints` are created and recorded in the API. DNS configuration is modified
+to return A records that point directly to the Pods backing the Service.
+- If selector is not defined `Endpoint` object is not created.
+
+#### Service Type
+
+***NodePort***
+: NodePort Service listens to a Port on the node(s) and forward requests on that port to a port on the Pod. We can 
+access NodePort service from outside the cluster. We can use any nodes IP and `nodeport` to get service. NodePort 
+Service forward requests to Pod randomly, or we can set up our own load balancing solutions.
+
+
+
+
+
