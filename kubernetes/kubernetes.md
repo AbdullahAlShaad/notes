@@ -298,7 +298,7 @@ kube-proxy is responsible for implementing a form of virtual IP for Services.
 kube-proxy in userspace mode chooses a backend via a round-robin algorithm. If the chosen pod does not respond,
 kube-proxy will retry with a different backend Pod.
 
-![alt text](https://github.com/Shaad7/notes/blob/master/images/UserSpaceProxy.png?raw=true
+![alt text](https://github.com/Shaad7/notes/blob/master/images/UserspaceProxy.png?raw=true
 "User Space Proxy Mode")
 
 ***iptables proxy mode***
