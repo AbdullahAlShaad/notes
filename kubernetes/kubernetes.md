@@ -406,7 +406,7 @@ The controller allocated a proportional amount of endpoints to each zone.
 
 ## DNS for Services and Pods
 
-Kubernetes DNS schedules a DNS Pod and Service on the cluster, and configures kubelets to tell individual containers to
+Kubernetes DNS schedules a DNS Pod and Service on the cluster, and configures  kubelet to tell individual containers to
 use the  DNS Service's IP to resolve DNS names.
 
 A DNS query may return different results based on the namespace of the pod making it. DNS queries that 
@@ -423,3 +423,19 @@ created by Deployment. `deployment-name` field is omitted if we create bare Pod.
 and `subdomain` set to "bar", in namespace "my-namespace", will have the domain name `foo.bar.my-namespace.svc.cluster-domain.example`
 
 _Pod with no hostname but with subdomain will only create the A or AAAA record for the headless service._
+
+## Ingress
+
+Ingress is used to manage communication between k8s cluster and outside world. Ingress can direct different api paths 
+to different k8s services.
+
+We can expose one service as default backend through ingress.
+
+A fanout configuration routes traffic from a single IP address to more than one Service, based
+on the HTTP URL being requested. [_Sample YAML to create fanout ingress_](https://github.com/Shaad7/notes/blob/master/sample-yaml/fanout-ingress.yaml)
+
+Name-based virtual hosts support routing HTTP traffic to multiple host names at the same IP address(
+ingress IP ) and then forwarded to multiple service. [_Sample YAML to create Name based virtual hosting_](https://github.com/Shaad7/notes/blob/master/sample-yaml/name-based-ingress.yaml)
+
+Ingress can be secured(HTTPS) by specifying a Secret that contains a TLS private key and certificate. We create the 
+then secret and specify the secret name when creating Ingress.
