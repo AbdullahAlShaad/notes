@@ -403,3 +403,23 @@ influence how traffic to is routed.
 
 The EndpointSlice controller is responsible for setting hints on EndpointSlices when this feature is enabled. 
 The controller allocated a proportional amount of endpoints to each zone.
+
+## DNS for Services and Pods
+
+Kubernetes DNS schedules a DNS Pod and Service on the cluster, and configures kubelets to tell individual containers to
+use the  DNS Service's IP to resolve DNS names.
+
+A DNS query may return different results based on the namespace of the pod making it. DNS queries that 
+don't specify a namespace are limited to the pod's namespace. To access services in other namespaces we need
+to specify the namespace in DNS query.
+
+### DNS Records
+
+- Services : `my-svc.my-namespace.svc.cluster-domain.example` resolves to one IP for services and  a set of IP for headless
+services. SRV Records has the form `_my-port-name._my-port-protcol.my-svc.my-namespace.svc.cluster-domain.example` and 
+it resolves to a port number and the domain name.
+- Pods : `pod-ip-adress.deployment-name.my-namespace.svc.cluster-domain.example` is an example resolution for Pod
+created by Deployment. `deployment-name` field is omitted if we create bare Pod. A pod with `hostname` set to "foo"
+and `subdomain` set to "bar", in namespace "my-namespace", will have the domain name `foo.bar.my-namespace.svc.cluster-domain.example`
+
+_Pod with no hostname but with subdomain will only create the A or AAAA record for the headless service._
