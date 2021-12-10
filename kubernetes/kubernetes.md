@@ -305,7 +305,7 @@ If service have no selector, Endpoints object is not created by k8s.
 ***EndPoint*** When a service matches pods with selector, the pods IP address and Port is stored in Endpoint object.
 When the pod is restarted, Endpoint object is updated
 
-Endpoint slices works like Endpoint, but it is more scalable and more suitable when we have large cluster.
+EndpointSlices works like Endpoint, but it is more scalable and more suitable when we have large cluster.
 
 #### Kube-Proxy
 kube-proxy is responsible for implementing a form of virtual IP for Services. The IP of k8s objects are not accessible
@@ -439,3 +439,18 @@ ingress IP ) and then forwarded to multiple service. [_Sample YAML to create Nam
 
 Ingress can be secured(HTTPS) by specifying a Secret that contains a TLS private key and certificate. We create the 
 then secret and specify the secret name when creating Ingress.
+
+## EndpointSlice 
+
+EndpointSlices provide a simple way to track network endpoints withing a Kubernetes cluster. They offer a more
+scalable and extensible alternative to Endpoints.
+
+EndpointSlice contains references to a set of network endpoints. The control plane automatically creates
+EndpointSlices for any k8s Service that has a selector specifies. These Endpoints include references to all 
+the Pods that match the Service selector.
+
+[_Sample EndpointSlice resource for the example
+Kubernetes Service_](https://github.com/Shaad7/notes/blob/master/sample-yaml/endpoint.yaml)
+
+EndpointSlice can act as the source of truth for kube-proxy when it comes to how to route internal traffic.
+
