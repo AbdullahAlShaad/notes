@@ -475,3 +475,40 @@ can be used to checkpointing a long computation for recovery from crashes. [_Sam
 A `hostPath` volume mounts a file or directory from the host node`s filesystem into Pod. It presents many security risk.
 It should be avoided when possible and should be used in Read-Only mode when needed.
 [_Sample Configuration of hostPath_](https://github.com/Shaad7/notes/blob/master/sample-yaml/hostPath.yaml).
+
+### local
+
+A local volume represents a mounted local storage device such as disk, partition or directory. Local volume can be
+used a statically created PersistentVolume. Dynamic provisioning is not supported. `nodeAffinity`
+must be set when crating local volume so that k8s scheduler can schedule the volume in correct storage.
+
+[_A Sample YAML file to create a Persistent Local Volume_](https://github.com/Shaad7/notes/blob/master/sample-yaml/local-volume.yaml)
+
+### nfs
+An `nfs` volume allows an existing Network File System share to be mounted into a Pod. NFS volume can persist data
+when Pod is removed, and it can be pre-populated with data and data can be shared between pods.
+
+### persistentVolumeClaim
+A `persistentVolumeClaim` volume is used to mount a PersistentVolume into a Pod. PersistentVolumeClaims are a way
+for users to "claim" durable storage without knowing the details of the particular cloud environment.
+
+### secret
+A `secret` volume is used to pass sensitive information, such as passwords, to Pods. Secrets can be stored in
+k8s api and mount them as files for use by pods.
+
+### Using subPath
+
+Sometimes it is useful to share one volume for multiple uses/containers in a single Pod. Using subPath we 
+can specify a subPath for different containers.
+
+[_A Sample YAML file to create a Volume Sub Path_](https://github.com/Shaad7/notes/blob/master/sample-yaml/volume-subPath.yaml)
+
+### csi
+Container Storage Interface(CSI) defines a standard interface for k8s to expose 
+arbitrary storage systems to container workloads. csi volume can be used
+through a reference to a PersistentVolumeClaim.
+
+### Mount Propagation
+
+Mount propagation allows for sharing volumes mounted by a container to other container
+in the same pod or even to other pods on the same node.
