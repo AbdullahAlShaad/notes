@@ -454,3 +454,24 @@ Kubernetes Service_](https://github.com/Shaad7/notes/blob/master/sample-yaml/end
 
 EndpointSlice can act as the source of truth for kube-proxy when it comes to how to route internal traffic.
 
+## Volumes
+
+A volume is directory, possible with some data in it which is accessible to the containers in a pod. Ephemeral volume
+types have a lifetime of a pod but persistent volumes exist beyond the lifetime of a pod. For any kind of volumes in a 
+given pod, data is preserved across container restarts.
+
+***A ConfigMap provides a way to inject configuration data into pods.*** This [_Sample Configuration_](https://github.com/Shaad7/notes/blob/master/sample-yaml/configmap-pod.yaml) shows how to 
+mount `log-config` ConfigMap onto a Pod called `configmap-pod`. 
+
+### emptyDir
+
+An `emptyDir` volume is first created when a Pod is assigned to a node, and exists as long as that Pod is running
+on that node. `emptyDir` volume is initially empty, all containers in the Pod can read and write the same files in the 
+`emptyDir` volume, though that volume can be mounted at the same or different paths in each container. `emptyDir` 
+can be used to checkpointing a long computation for recovery from crashes. [_Sample Configuration of emptyDir_](https://github.com/Shaad7/notes/blob/master/sample-yaml/empty-dir.yaml).
+
+### hostPath
+
+A `hostPath` volume mounts a file or directory from the host node`s filesystem into Pod. It presents many security risk.
+It should be avoided when possible and should be used in Read-Only mode when needed.
+[_Sample Configuration of hostPath_](https://github.com/Shaad7/notes/blob/master/sample-yaml/hostPath.yaml).
