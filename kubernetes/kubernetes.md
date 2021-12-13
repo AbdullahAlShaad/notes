@@ -460,7 +460,7 @@ A volume is directory, possible with some data in it which is accessible to the 
 types have a lifetime of a pod but persistent volumes exist beyond the lifetime of a pod. For any kind of volumes in a 
 given pod, data is preserved across container restarts.
 
-***A ConfigMap provides a way to inject configuration data into pods.*** This [_Sample Configuration_](https://github.com/Shaad7/notes/blob/master/sample-yaml/configmap-pod.yaml) shows how to 
+**A ConfigMap provides a way to inject configuration data into pods.** This [_Sample Configuration_](https://github.com/Shaad7/notes/blob/master/sample-yaml/configmap-pod.yaml) shows how to 
 mount `log-config` ConfigMap onto a Pod called `configmap-pod`. 
 
 ### emptyDir
@@ -512,3 +512,35 @@ through a reference to a PersistentVolumeClaim.
 
 Mount propagation allows for sharing volumes mounted by a container to other container
 in the same pod or even to other pods on the same node.
+
+## Persistent Volumes
+
+A **PersistentVolume(PV)** is a piece of storage in the cluster that has been provisioned by an admin or 
+dynamically provisioned by Storage Classes.
+
+A **PersistentVolumeClaim(PVC)** is a request for storage by a user. It is similar to a Pod. Pod consumes
+node resources and PVC consumes PV resources.
+
+### Life Cycle of a Volume and Claim
+
+- **Provisioning :** Allocating the memory. Can be static or dynamic(based on claim)
+- **Binding :** PVC with specific storage amount and access modes are requested. If a matching PV is found
+, the PVC and PV are bound together.
+- **Using :** Pods use claims as volumes.
+- **Reclaiming :** When a user is done with their volume, they can delete the PVC objects from the API
+that allows reclamation of the resource. Volumes can either be Retained, Recycled, or Deleted using reclaim policy.
+
+_A PV can be reserved for a PVC_
+
+[_A Sample YAML file to create a NFS Persistent Volume._](https://github.com/Shaad7/notes/blob/master/sample-yaml/persistent-volumes.yaml)
+
+**Node Affinity** should be explicitly set for local volumes.
+
+### PersistentVolumeClaims
+
+PVC is used by Pods to claim volume. Pods use volume through PVC. Claims can specify label selector
+to filter the set of volumes. Only the volumes whose labels match the selector can be bound to the claim.
+
+[_A Sample YAML file to create a PersistentVolumeClaim._](https://github.com/Shaad7/notes/blob/master/sample-yaml/persistent-volume-claim.yaml)
+
+_Pods access storage by using the claim as a volume. Claims must exist in the same namespace as the POd using the claim_
