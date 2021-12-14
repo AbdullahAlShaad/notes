@@ -577,3 +577,27 @@ They may also provide some additional features :
 We use Generic ephemeral volumes when creating a Pod. When such a Pod gets created, the ephemeral volume
 controller then creates an actual PVC object in the same namespace as the Pod and ensures that the PVC 
 gets deleted when the Pod gets deleted.
+
+## Storage Class
+
+A StorageClass provides a way for admin to describe the "classes" of storage they  offer. Different classes
+might map to quality-of-service levels, or backup policies. To use different types of storage, we can use
+storage classes when creating PVC. A cluster admin can define and expose multiple flavors of storage each with
+different set of parameters using Storage Class.
+
+Each StorageClass contains the fields `provisioner`,
+parameters, and `reclaimPolicy` which are used when a PersistentVolume belonging to the class needs to be
+dynamically provisioned.
+
+If `volumeBindingMode` is set to `Immediate`, volume binding and dynamic provisioning occurs once
+the PersistentVolumeClaim is created.
+
+### Dynamic Volume Provisioning
+
+Dynamic Volume Provisioning allows storage volumes to be created when volume is requested rather than creating
+volumes beforehand. It ensures that user don't have to worry about the complexity and nuances of how 
+storage is provisioned, but still can select form multiple storage options.
+
+To use dynamic provisioning, a cluster admin needs to pre-create one or more StorageClass objects for users.
+StorageClass objects define provisioner and which parameters should be passed to that provisioner when 
+dynamic provisioning is invoked.
