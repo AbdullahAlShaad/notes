@@ -544,3 +544,36 @@ to filter the set of volumes. Only the volumes whose labels match the selector c
 [_A Sample YAML file to create a PersistentVolumeClaim._](https://github.com/Shaad7/notes/blob/master/sample-yaml/persistent-volume-claim.yaml)
 
 _Pods access storage by using the claim as a volume. Claims must exist in the same namespace as the POd using the claim_
+
+### Projected Volumes
+
+A projected volume maps several existing volumes sources into the same directory. `secret`, `downwardAPI`, 
+`configMap` and `serviceAccountToken` volumes can be projected.
+[_A Sample YAML file to create a Projected Volumes._](https://github.com/Shaad7/notes/blob/master/sample-yaml/projected-volume.yaml)
+
+## Ephemeral Volumes
+
+Ephemeral Volumes don't care whether the data is stored persistently across restarts. Usually they are
+used for caching services or provide application some read only files like configuration data or secret keys.
+
+### Types of ephemeral volumes
+- emptyDir : empty at Pod startup, with storage coming locally from the kubelet based directory or RAM
+- configMap, downwardAPI, secret : inject different kinds of k8s data into a Pod
+- CSI ephemeral volumes : Provided by special CSI drivers.
+- generic ephemeral volumes : can be provided by all storage drivers that also support persistent volumes
+
+`emptyDir`, `configMap`, `downwardAPI`, `secret` are provided as local ephemeral storage and managed by kubelet.
+Generic ephemeral volumes can be provided by third-party CSI storage drivers, but also by any other
+storage driver that supports dynamic provisioning.
+
+### Generic ephemeral volumes
+Generic ephemeral volumes provide a per-pod directory for scratch data that is usually empty after provisioning.
+They may also provide some additional features : 
+- Storage can be local or network-attached
+- Volumes can have a fixed size that Pods are not able to exceed
+- Volumes may have some initial data
+- Snapshotting, Cloning, resizing and storage capacity tracking are supported
+
+We use Generic ephemeral volumes when creating a Pod. When such a Pod gets created, the ephemeral volume
+controller then creates an actual PVC object in the same namespace as the Pod and ensures that the PVC 
+gets deleted when the Pod gets deleted.
