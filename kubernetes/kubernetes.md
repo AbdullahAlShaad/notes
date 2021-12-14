@@ -601,3 +601,32 @@ storage is provisioned, but still can select form multiple storage options.
 To use dynamic provisioning, a cluster admin needs to pre-create one or more StorageClass objects for users.
 StorageClass objects define provisioner and which parameters should be passed to that provisioner when 
 dynamic provisioning is invoked.
+
+## Volume Snapshots
+
+A `VolumeSnapshotContent` is a snapshot taken from a volume in the cluster that has been provisioned by an
+admin. It is a resource in the cluster just like PV.
+
+A `VolumeSnapshot` is a request for snapshot of a volume by a user. It is similar to a PVC.
+
+A `VolumeSnapshotClass` provides a way to describe the "classes" of storage when provisioning a volume snapshot.
+It is like StorageClass.
+
+_VolumeSnapshot support is only available for CSI drivers_
+
+In dynamic provisioning, the snapshot common controller creates `VolumeSnapshotContent` objects automatically.
+For pre-provisioned snapshots, cluster admin is responsible for creating `VolumeSnapshotContent`.
+
+Volume snapshot classes have a driver that determines what CSI volume plugin is used for provisioning
+VolumeSnapshots.
+
+### CSI Volume Cloning
+
+When creating a PVC, we can refer another existing PVC as data source. It is called Volume Clonning.
+
+It is only supported for CSI Drivers. A PVC can only be cloned when source and destination is in the same 
+namespace and same storage class. Cloning can only be performed between two volumes that use the same
+VolumeMode setting. The storage of new PVC should be same or larger than existing source PVc.
+
+
+
