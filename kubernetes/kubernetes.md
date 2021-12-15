@@ -645,3 +645,18 @@ Because Secrets can be created independently of the Pods that use them, there is
 being exposed during workflow of creating, viewing, and editing Pods.
 
 _Secrets are similar to ConfigMaps but are intended to hold confidential data_
+
+### Types of Secret
+
+- **Opaque secrets :** Default Secret type to store any key-value pair.
+- **Service Account Token Secrets :** It is used to store a token that identifies a service account.
+- **Docker Config Secrets :** Stores credentials for accessing Docker registry for images.  `~/.coker/config.json`
+files is provided as base64 encoded string in  the secret.
+- **Basic authentication Secret :** Contains 'username' and `password` for basic authentication
+- **SSH authentication secrets :** Used for passing `ssh-privateke` for SSH authentication.
+- **TLS secrets :** It can be used for storing a certificate(`tls.crt`) and its associated key(`tls.key`) that  
+are typically used for TLS. Can be created form command line using `tls` subcommand.
+- **Bootstrap token Secrets :** It is designed for tokens used during the node bootstrap process.
+
+[A sample Service Account Token Secret YAML File](https://github.com/Shaad7/notes/blob/master/sample-yaml/service-account-token-secret.yaml)
+
