@@ -642,7 +642,8 @@ Here is a [sample Pod](https://github.com/Shaad7/notes/blob/master/sample-yaml/c
 
 A Secret is an object that contains a small amount of sensitive data such as a password, a token, or a key.
 Because Secrets can be created independently of the Pods that use them, there is less risk of the Secret 
-being exposed during workflow of creating, viewing, and editing Pods.
+being exposed during workflow of creating, viewing, and editing Pods. Secret can be mounted as data volumes
+or exposed as environment variables to be used by a container in a Pod.
 
 _Secrets are similar to ConfigMaps but are intended to hold confidential data_
 
@@ -658,5 +659,18 @@ files is provided as base64 encoded string in  the secret.
 are typically used for TLS. Can be created form command line using `tls` subcommand.
 - **Bootstrap token Secrets :** It is designed for tokens used during the node bootstrap process.
 
-[A sample Service Account Token Secret YAML File](https://github.com/Shaad7/notes/blob/master/sample-yaml/service-account-token-secret.yaml)
+[A sample Service Account Token Secret YAML File](https://github.com/Shaad7/notes/blob/master/sample-yaml/service-account-token-secret.yaml).
+Here is a [sample pod](https://github.com/Shaad7/notes/blob/master/sample-yaml/secret-demo-pod.yaml) 
+that consumes the Secret.
+
+Instead of mounting the whole secret, we can take keys and create volume for it, and 
+we can also mount that volume in specific path. Permission can be managed for whole
+secret as well as specific keys when mounting it in Pod directory.
+
+### Immutable Secrets
+
+Secrets and ConfigMaps can be immutable. Immutable secrets protects accidental 
+updates and reduce load on kube-apiserver by closing watches for secrets marked as 
+immutable.
+
 
