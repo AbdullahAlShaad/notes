@@ -622,11 +622,26 @@ VolumeSnapshots.
 
 ### CSI Volume Cloning
 
-When creating a PVC, we can refer another existing PVC as data source. It is called Volume Clonning.
+When creating a PVC, we can refer another existing PVC as data source. It is called Volume Cloning.
 
 It is only supported for CSI Drivers. A PVC can only be cloned when source and destination is in the same 
 namespace and same storage class. Cloning can only be performed between two volumes that use the same
 VolumeMode setting. The storage of new PVC should be same or larger than existing source PVc.
 
+## ConfigMaps
+
+A ConfigMap is an API object used to store non-confidential data in key-value pairs. Pods can consume ConfigMaps
+as environment variables, CL arguments or as configuration files in a volume. ConfigMap is used to 
+decouple environment specific configuration from container image so that the applications are easily portable.
+
+[A sample configMap YAML file](https://github.com/Shaad7/notes/blob/master/sample-yaml/config-map.yaml). 
+Here is a [sample Pod](https://github.com/Shaad7/notes/blob/master/sample-yaml/configmap-demo-pod.yaml) that consumes the ConfigMap.
 
 
+## Secrets
+
+A Secret is an object that contains a small amount of sensitive data such as a password, a token, or a key.
+Because Secrets can be created independently of the Pods that use them, there is less risk of the Secret 
+being exposed during workflow of creating, viewing, and editing Pods.
+
+_Secrets are similar to ConfigMaps but are intended to hold confidential data_
