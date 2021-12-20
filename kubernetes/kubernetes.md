@@ -737,6 +737,10 @@ We can also bind ClusterRole with a User using RoleBinding. The User will only g
 access a specified namespace. In this way, we can create a global role and 
 grant permission to different user in different namespace.
 
+![alt text](https://github.com/Shaad7/notes/blob/master/images/rbac.png?raw=true
+"Rule Back Access Control")
+
+
 ### Aggregated ClusterRoles
 
 Using Aggregated ClusterRoles we can combine multiple ClusterRoles into one 
