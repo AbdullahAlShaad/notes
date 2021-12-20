@@ -673,4 +673,25 @@ Secrets and ConfigMaps can be immutable. Immutable secrets protects accidental
 updates and reduce load on kube-apiserver by closing watches for secrets marked as 
 immutable.
 
+## Scheduling
+
+### Node Affinity
+
+Node Affinity is a property of Pods that attracts them to a set of nodes.
+
+We can make some rules which will be used to schedule Pods to Nodes. These rules can be soft/preference so
+if the scheduler can't satisfy them, the pod will still be scheduled. There is two types of affinity
+, "node affinity" and "inter-pod affinity/anti-affinity". Node affinity is used to schedule Pods to Nodes.
+Node affinity is specified as files `nodeAffinity` of field `affinity` in  the PodSpec.
+
+[_A Sample YAML file of a Pod with Node Affinity_](https://github.com/Shaad7/notes/blob/master/sample-yaml/node-affinity.yaml)
+
+
+**Inter-pod affinity and anti-affinity** allow you to constrain which nodes your pod is eligible to be
+scheduled based on labels on pods that are already running on the node rather than based on labels on the
+nodes.
+
+[_A Sample YAML file of a Deployment with Inter Pod Anti-Affinity_](https://github.com/Shaad7/notes/blob/master/sample-yaml/inter-pod-affinity.yaml)
+
+
 
