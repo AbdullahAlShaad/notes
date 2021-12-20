@@ -671,7 +671,7 @@ secret as well as specific keys when mounting it in Pod directory.
 
 Secrets and ConfigMaps can be immutable. Immutable secrets protects accidental 
 updates and reduce load on kube-apiserver by closing watches for secrets marked as 
-immutable.
+immutable. 
 
 ## Scheduling
 
@@ -693,5 +693,21 @@ nodes.
 
 [_A Sample YAML file of a Deployment with Inter Pod Anti-Affinity_](https://github.com/Shaad7/notes/blob/master/sample-yaml/inter-pod-affinity.yaml)
 
+### Taints and Tolerations
 
+Taints allow a node to repel a set of pods. Tolerations are applied to Pods, and allow(but do not require)
+the pods to schedule onto nodes with matching taints. 
+
+To set taint on a node `node1`
+```shell
+kubectl taint nodes node1 key1=value1:NoSchedule
+kubectl taint nodes node1 key1=value1:NoExecute
+kubectl taint nodes node1 key2=value2:NoSchedule
+```
+
+`NoSchedule` means if the Pod does not have the taint as toleration, it will not be schedules on that Node.
+`NoExecute` is used to evict Pods from the Node that does not tolerate the applied taint.
+`PreferNoSchedule` will try not to schedule the Pod on that Node.
+
+[_A Sample YAML file of a Pod with tolerations_](https://github.com/Shaad7/notes/blob/master/sample-yaml/taint-toleration.yaml)
 
