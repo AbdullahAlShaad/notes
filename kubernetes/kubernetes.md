@@ -705,9 +705,46 @@ kubectl taint nodes node1 key1=value1:NoExecute
 kubectl taint nodes node1 key2=value2:NoSchedule
 ```
 
-`NoSchedule` means if the Pod does not have the taint as toleration, it will not be schedules on that Node.
-`NoExecute` is used to evict Pods from the Node that does not tolerate the applied taint.
-`PreferNoSchedule` will try not to schedule the Pod on that Node.
+- `NoSchedule` means if the Pod does not have the taint as toleration, it will not be schedules on that Node.
+- `NoExecute` is used to evict Pods from the Node that does not tolerate the applied taint.
+-  `PreferNoSchedule` will try not to schedule the Pod on that Node.
 
 [_A Sample YAML file of a Pod with tolerations_](https://github.com/Shaad7/notes/blob/master/sample-yaml/taint-toleration.yaml)
+
+## Role Based Access Control (RBAC)
+
+Role-based access control (RBAC) is a method of regulating access to computer or network resources
+on the roles of individual users within organization.
+
+**Role** is used to set permissions within a particular namespace.
+
+**Cluster Role** is used to set permissions across the cluster.
+
+[Sample YAML to create a Role](https://github.com/Shaad7/notes/blob/master/sample-yaml/role.yaml)
+
+Both Role and ClusterRole have must define resources and verbs. The role says that we can use those 
+verbs on the specified resources.
+
+### RoleBinding and ClusterRoleBinding
+
+A RoleBinding grants the permissions defined in a role to a user or set of users. A ClusterRoleBinding 
+ binds a ClusterRole with users.
+
+[Sample YAML](https://github.com/Shaad7/notes/blob/master/sample-yaml/role.yaml)
+to create a RoleBinding which binds previously create pod-reader Role with a User. 
+
+We can also bind ClusterRole with a User using RoleBinding. The User will only get 
+access a specified namespace. In this way, we can create a global role and 
+grant permission to different user in different namespace.
+
+### Aggregated ClusterRoles
+
+Using Aggregated ClusterRoles we can combine multiple ClusterRoles into one 
+ClusterRole. It works using labels and labelSelector in aggregationRule.
+
+### Subjects
+
+A RoleBinding or ClusterRoleBinding binds a role to a subjects. Subjects can be groups, users or
+ServiceAccounts.
+
 
