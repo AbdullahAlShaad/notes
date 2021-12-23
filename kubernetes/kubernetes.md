@@ -752,3 +752,9 @@ A RoleBinding or ClusterRoleBinding binds a role to a subjects. Subjects can be 
 ServiceAccounts.
 
 
+## Horizontal Pod Autoscaling
+
+_HorizontalPodAutoscaler_ updates a workload resource (Deployment or StatefulSet) with the aim of automatically
+scaling the workload to match demand. If the load increases and the memory and cpu utilization of 
+existing resources increases above a certain threshold, _HorizontalPodAutoscaler_ scales the workload 
+resource. And again when the load decreases, the resource will be scaled down to minimum eventually.
