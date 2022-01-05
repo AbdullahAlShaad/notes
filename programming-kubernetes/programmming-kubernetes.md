@@ -14,3 +14,5 @@ lifecycle management, along with the custom resource.
 - Change the state of objects
 - Update the status of the resource
 
+![alt text](https://github.com/Shaad7/notes/blob/master/images/k8s-control-loop.png?raw=true
+"Kubernetes Controller")
