@@ -28,3 +28,35 @@ An operator has domain specific knowledge and knows how to do stuff on that doma
 operator knows when and how to re-balance nodes. An operator for service mash knows how to create a route.
 
 
+## Kubernetes API Basics
+
+A kubernetes cluster has master nodes and worker nodes. The Control plane on the master node consist 
+of the API server, controller manager and scheduler. The API server reads and manipulates state.
+
+### The HTTP Interface of the API Server
+
+The API server HTTP interface handles HTTP requests to query and manipulate Kubernetes resources using
+HTTP Verbs.
+- GET verb to retrieve resource data
+- POS verb for creating a resource
+- PUT ver for updating an existing resource
+- PATCH verb for partial updates of existing resource
+- DELETE verb to destroy a resource
+
+***API group*** : A collection of Kinds that are logically related.
+***Resource*** : Identifies a set of HTTP endpoints exposing the CRUD semantics of a certain object 
+type in system. For example /pods, /pods/nginx
+
+### How the API Server Processes Requests
+
+The HTTP request is processed by a chain of filters. It applies a series of filter operation on the 
+request. If passed, each filter pass the request onto the next otherwise it returns an HTTP failed response.
+Then the multiplexer routes the HTTP request to respective handler. It retrieves and delivers the request
+object from etcd storage. Request for RESTful resources go into the request pipeline consisting of:
+- admission : It has plugins that validate or mutate the request payload.
+- validation : Incoming objects are checked against a large validation logic which exist for each 
+object type. For example, names are checked if it is valid DNS name.
+- etcd-backed CRUD logic : Different HTTP verbs are implemented in this stage.
+
+
+
