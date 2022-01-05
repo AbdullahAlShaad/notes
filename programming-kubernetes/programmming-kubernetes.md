@@ -7,3 +7,10 @@ state.
 
 Operators are controllers that encode some operational knowledge such as application
 lifecycle management, along with the custom resource.
+
+***The Control Loop*** : The control loop has three states.
+
+- Read Resource State
+- Change the state of objects
+- Update the status of the resource
+
