@@ -58,5 +58,68 @@ object from etcd storage. Request for RESTful resources go into the request pipe
 object type. For example, names are checked if it is valid DNS name.
 - etcd-backed CRUD logic : Different HTTP verbs are implemented in this stage.
 
+## Basics of client-go
+
+***There are options structs for CRUD verbs like CreateOptions, GetOptions, UpdateOptions, DeleteOptions and
+ObjectMeta. All of these are frequently extended with new features, we usually call them API
+machinery features***
+
+### Kubernetes Objects in Go
+
+Kubernetes objects that are instances of a kind and are served as a resource by the API server 
+are represented as structs. Kubernetes objects in Go is a data structure that can :
+- Return and set the GroupVersionKind
+- Be deep-copied
+
+#### TypeMeta
+TypeMeta describes an individual object in an API response or request with strings representing
+the type of the object and its API schema version.
+
+#### ObjectMeta
+ObjectMeta contains various information about the resource like Namespace, UID, Resource Version, Creation
+and Deletion Timestamp.
+
+#### spec and status
+spec is the user desire and status is the outcome of that desire usually filled by a controller in the system.
 
 
+_A client set gives access to clients for multiple API groups and resources._
+
+### Informers and Caching 
+
+Informers five a higher-level programming interface for the most common use case for watches :
+- in memory caching
+- fast,indexed lookup of objects by name
+
+Informer get input from the API server as events and register event handlers for adds, removes, and updates.
+Informer also implement the in-memory cache using a store.
+
+Informers allow event handlers for the three cases add, update and delete. These are usually used to
+trigger the business logic of a controller. Informers are initiated using `shared informer factory`.
+
+### Work Queue
+
+A priority queue where items can be added and taken out. The basic queue is modified by adding special
+feature like delaying add and rate limiting add.
+
+### API Machinery in Depth
+The API Machinery repository implements the basics of the Kubernetes type system. Type refers to kinds.
+
+#### Kinds
+Kinds do not formally map one-to-one to HTTP paths. Many kinds have HTTP REST endpoints that are used to 
+access objects of the given kind. But there are also kinds without any endpoint. Kinds are singular and 
+CamelCase.
+
+#### Resources
+Each GVR(GroupVersionResource) corresponds to one HTTP path. GVRs are used to identify REST endpoints of the
+Kubernetes API. Resources are plural and lowercase.
+
+#### REST Mapping
+The mapping of a GVK to a GVR is called REST mapping.
+
+#### Scheme
+A scheme connects the world of Golang with the implementation-independent world of GVKs. The main
+feature of a scheme is the mapping of Golang types to possible GVKs.
+
+**Golang type--**(_Scheme_)**--> GroupVersionKind --**(RESTMapper)**-->GroupVersionResource--**(_client_) 
+**--> HTTP path**
