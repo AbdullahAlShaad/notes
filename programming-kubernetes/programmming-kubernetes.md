@@ -123,3 +123,35 @@ feature of a scheme is the mapping of Golang types to possible GVKs.
 
 **Golang type--**(_Scheme_)**--> GroupVersionKind --**(RESTMapper)**-->GroupVersionResource--**(_client_) 
 **--> HTTP path**
+
+## Using Custom Resources
+
+Custom resources are used for small, in-house configuration objects without any corresponding controller
+logic - purely decoratively defined.
+
+Custom resources are available in k8s cluster. They are stored in the same etcd instance as the main
+Kubernetes API resources and served by the same Kubernetes API server. Requests fall back to 'apiextensions-api
+server' which serves the resources defined via CRDs if they are not native Kubernetes resources or handled
+by aggregated API servers.
+
+A CustomResourceDefinition(CRD) is a Kubernetes resource itself. It describes the available CRs in the
+cluster.
+
+### Validating Custom Resource
+
+Custom Resources can be validated by the API server during creation and updates. This is done based on the
+OpenAPI v3 schema specified in the validation fields in the CRD spec. More complex validations can be 
+implemented in validating admission webhooks.
+
+### Subresources
+
+Subresources are special HTTP endpoints, using a suffix appended to the HTTP path of the normal resource.
+Pods have a number of subresources such as /logs, /portforward, /exec and /status.
+
+#### Status subresource
+The /status subresource is used to split the user-provided specification of a CR instance from the 
+controller-provided status.
+
+#### Scale subresources
+The /scale subresource is a projective view on the resource, allowing us to view and modify replica
+values only
