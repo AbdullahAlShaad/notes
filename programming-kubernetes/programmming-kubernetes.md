@@ -137,6 +137,9 @@ by aggregated API servers.
 A CustomResourceDefinition(CRD) is a Kubernetes resource itself. It describes the available CRs in the
 cluster.
 
+[_Sample YAML_](https://github.com/Shaad7/notes/blob/master/sample-yaml/resource-definiton.yaml)
+to create Custom Resource Definition and [_Sample YAML_](https://github.com/Shaad7/notes/blob/master/sample-yaml/resource-definiton.yaml) to create a resource using that CRD.
+
 ### Validating Custom Resource
 
 Custom Resources can be validated by the API server during creation and updates. This is done based on the
@@ -150,8 +153,21 @@ Pods have a number of subresources such as /logs, /portforward, /exec and /statu
 
 #### Status subresource
 The /status subresource is used to split the user-provided specification of a CR instance from the 
-controller-provided status.
+controller-provided status. Status field is updated by Controller.
 
 #### Scale subresources
 The /scale subresource is a projective view on the resource, allowing us to view and modify replica
-values only
+values only. Scale field is updated by user.
+
+### Schema Options
+
+#### Finalizers
+Finalizers allow controllers to implement asynchronous pre-delete hooks. Custom objects support finalizers
+similar to build-in objects.
+
+### Validation
+Custom resources are validated via OpenAPI v3 schemas. Additional validation using admission webhooks can
+be done.
+
+_We can also specify default values in OpenAI v3 validation schema. Default value is used when user don't
+specify that field value or provides a null value._
