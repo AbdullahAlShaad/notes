@@ -171,3 +171,25 @@ be done.
 
 _We can also specify default values in OpenAI v3 validation schema. Default value is used when user don't
 specify that field value or provides a null value._
+
+### Clients
+
+#### Dynamic Client
+Used by Kubernetes itself for controllers that are generic, like the garbage collection controller.
+
+#### Typed Clients
+Typed clients use Golang types which are specific for each GVK. Kinds are represented as Golang structs.
+Every Golang type corresponding to a GVK embeds the TypeMeta struct. ObjectMeta stores Name, Namespace and other
+details.
+
+#### controller-runtime client of operator SDK and Kubebuilder
+Controller-runtime client is capable of handling any kind that is registered in a given scheme. It uses
+discovery information from the API server to map the kinds to HTTP paths. Controller-runtime client 
+presented is just one object for all kinds.
+
+### Versions in CustomResourceDefinitions
+
+Custom resource objects need to be able to be served at multiple versions. To achieve this, the custom
+resource objects must sometimes be converted between the version the are stored at and the version they 
+are served at. If the conversion involves schema changes and requires custom logic, a conversion webhook
+should be used.
