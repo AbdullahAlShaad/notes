@@ -70,6 +70,10 @@ kubectl get pods --field-selector status.phase=Running
 **Finalizers :** Finalizers are namespaced keys that tell k8s to wait specific conditions are met before it fully 
 deletes resources marked for deletion. It can be used as garbage collector
 
+**Annotations:** Annotations can be used in k8s objects like key-value pair. We can store different
+information about the object in annotations. It works like sort of comments . Build, release or image
+information like timestamps, release ID, registry address can be recorded in annotations. 
+
 
 ## Pods
 
@@ -316,16 +320,12 @@ from outside world. Thus, they are called Virtual IP.
 kube-proxy in userspace mode chooses a backend via a round-robin algorithm. If the chosen pod does not respond,
 kube-proxy will retry with a different backend Pod.
 
-![alt text](https://github.com/Shaad7/notes/blob/master/images/UserspaceProxy.png?raw=true
-"User Space Proxy Mode")
 
 ***iptables proxy mode***
 : In this mode, kube-proxy watches the k8s control plane for addition and removal of Service and Endpoint objects.
 kube-proxy in iptables mode chooses a backend at random. kube-proxy only sees backend that are healthy using 
 readiness probes. So the selected pod should be healthy.
 
-![alt text](https://github.com/Shaad7/notes/blob/master/images/IPtableProxy.png?raw=true
-"iptables proxy mode")
 
 ***IPVS proxy mode***
 : In `ipvs` mode, kube-proxy watches k8s Services and Endpoints, calls  `netlink` interface to create IPVS rules
@@ -333,9 +333,6 @@ accordingly and sync IPVS rules with k8s Services and Endpoint ts periodically. 
 traffic with lower latency than kube-proxy in iptables mode with much better performance when synchronising proxy rules.
 IPVS provides more options for balancing traffic to backend Pods such as Round-Robin, Least Connection, Destination 
 Hashing, Source Hashing, Shortest Expected Delay, Never Queue.
-
-![alt text](https://github.com/Shaad7/notes/blob/master/images/IPVSProxy.png?raw=true
-"IPVS proxy mode")
 
 _To run kube-proxy in IPVS mode, we must make IPVS available on the node before starting kube-proxy._
 
