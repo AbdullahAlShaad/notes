@@ -585,9 +585,13 @@ might map to quality-of-service levels, or backup policies. To use different typ
 storage classes when creating PVC. A cluster admin can define and expose multiple flavors of storage each with
 different set of parameters using Storage Class.
 
+**Storage Class dynamically creates  `Persistent Volume` when Pod request for storage using `Persistent
+ Volume Claim`**
+
 Each StorageClass contains the fields `provisioner`,
 parameters, and `reclaimPolicy` which are used when a PersistentVolume belonging to the class needs to be
-dynamically provisioned.
+dynamically provisioned. Using provisioner we can specify from where volume should be created. (Local 
+or NFS server or cloud service provider)
 
 If `volumeBindingMode` is set to `Immediate`, volume binding and dynamic provisioning occurs once
 the PersistentVolumeClaim is created.
